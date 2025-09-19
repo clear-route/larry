@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os/exec"
-	"strings"
 
 	"github.com/kdawg500/larry/parse"
 )
@@ -17,8 +16,16 @@ func main() {
 
 	gitLog := parse.GitLog{RawString: string(output)}
 	commit := gitLog.LastCommitHash()
-	var b strings.Builder
-	b.Write(output)
+	
+	cmd= exec.Command("git", "tag")
+	bTags, err := cmd.CombinedOutput()
+	if err != nil {
+		panic(err)
+	}
+
+	tag := parse.LastTag(bTags)
+	
+
+	fmt.Println(tag)
 	fmt.Println(commit)
-	// fmt.Printf("`%v`", string(output))
 }
